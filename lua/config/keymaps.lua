@@ -60,19 +60,26 @@ map("n", "<S-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
 
 -- Smart Close (Leader + q)
 map("n", "<leader>q", function()
-	if vim.bo.buftype == "terminal" then
-		vim.cmd("bdelete!")
+	local current_buf = vim.api.nvim_get_current_buf()
+	local is_term = vim.bo[current_buf].buftype == "terminal"
+
+	-- If it's a terminal buffer, just close the window
+	if is_term then
+		vim.cmd("close")
 		return
 	end
 
-	local wins = vim.api.nvim_tabpage_list_wins(0)
+	-- Count listed buffers
+	local buffers = vim.fn.getbufinfo({ buflisted = 1 })
 
-	if #wins > 1 then
-		vim.cmd("close")
+	-- If there is more than one buffer, delete the current one
+	if #buffers > 1 then
+		vim.api.nvim_buf_delete(current_buf, { force = false })
 	else
-		vim.cmd("bdelete")
+		-- If it's the last buffer, just quit Neovim
+		vim.cmd("q")
 	end
-end, { desc = "Smart Close Window/Buffer" })
+end, { desc = "Smart Close Buffer/Window" })
 
 -- ====================================================
 --                 SESSION MANAGEMENT
@@ -106,7 +113,33 @@ map("n", "<leader>fo", "<cmd>Telescope oldfiles<cr>", { desc = "Find recent file
 map("n", "<leader>e", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", { desc = "File Browser" })
 
 -- === TERMINAL ===
-map("n", "<C-z>", "<cmd>ToggleTerm<cr>", { desc = "Toggle Terminal" })
+-- A global function to toggle a horizontal terminal window
+function _G.ToggleTerminal()
+	local term_buf_found = nil
+	-- Find the buffer number of the open terminal window
+	for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+		local buf = vim.api.nvim_win_get_buf(win)
+		if vim.bo[buf].buftype == "terminal" then
+			term_buf_found = buf
+			break
+		end
+	end
+
+	if term_buf_found then
+		-- If a terminal buffer is found, force-delete it.
+		-- This closes the window and prevents the buffer from lingering.
+		vim.cmd(term_buf_found .. "bdelete!")
+	else
+		-- If no terminal window is found, open a new one.
+		vim.cmd("botright 15split | terminal")
+	end
+end
+
+-- Map <C-z> in normal mode to call the toggle function
+map("n", "<C-z>", "<cmd>lua _G.ToggleTerminal()<CR>", { desc = "Toggle Horizontal Terminal" })
+-- Map <C-z> in terminal mode to exit terminal mode and then call the toggle function
+map("t", "<C-z>", "<C-\\><C-n><cmd>lua _G.ToggleTerminal()<CR>", { desc = "Toggle Horizontal Terminal" })
+
 map("n", "<leader>t", "<cmd>terminal<cr>i", { desc = "Open Terminal Buffer" })
 
 -- === TROUBLE (Error List) ===
