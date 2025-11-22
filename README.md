@@ -1,6 +1,6 @@
-# My Neovim Config
+# Modern Neovim Configuration
 
-Αυτή είναι μια σύγχρονη παραμετροποίηση για το Neovim, εστιασμένη στην ανάπτυξη με Go και τεχνολογίες web (HTML, CSS, JavaScript, TypeScript).
+Αυτή είναι μια σύγχρονη παραμετροποίηση για το Neovim, σχεδιασμένη για να προσφέρει μια ολοκληρωμένη εμπειρία ανάπτυξης, ειδικά για Go και τεχνολογίες web (HTML, CSS, JavaScript, TypeScript).
 
 ## ✨ Χαρακτηριστικά
 
@@ -18,71 +18,50 @@
 
 ## ⚙️ Προαπαιτούμενα
 
-Πριν την εγκατάσταση, βεβαιωθείτε ότι έχετε τα παρακάτω εργαλεία στο σύστημά σας:
+Πριν την εγκατάσταση, βεβαιωθείτε ότι έχετε τα παρακάτω εργαλεία στο σύστημά σας. Οι παρακάτω οδηγίες αφορούν Arch Linux.
 
-- **[Neovim](https://github.com/neovim/neovim/wiki/Installing-Neovim)** (v0.8.0 ή νεότερη)
-- **[Git](https://git-scm.com/downloads)**
-- **[Node.js](https://nodejs.org/en/download/)** (και npm)
-- **[Go](https://go.dev/doc/install)**
-- **[Ripgrep](https://github.com/BurntSushi/ripgrep#installation)** (Απαραίτητο για την αναζήτηση κειμένου του Telescope)
-- **Build Tools** (`make`, `gcc`) για την компиляция του `telescope-fzf-native`. Συνήθως εγκαθίστανται με ένα πακέτο όπως το `build-essential` (Debian/Ubuntu) ή `base-devel` (Arch Linux).
-- **[Nerd Font](https://www.nerdfonts.com/font-downloads)** (Απαραίτητη για τη σωστή εμφάνιση των εικονιδίων).
+### 1. Εργαλεία Συστήματος (Pacman)
+
+Εγκαταστήστε τα βασικά εργαλεία, συμπεριλαμβανομένων των `git`, `ripgrep` (για το Telescope), `go`, `nodejs`, `npm`, και τα build tools (`base-devel`).
+
+```bash
+sudo pacman -Syu --noconfirm git ripgrep go nodejs npm base-devel
+```
+
+### 2. Εργαλεία Node.js (NPM)
+
+Το `live-server` χρησιμοποιείται για την προεπισκόπηση των web projects. Εγκαταστήστε το global μέσω `npm`.
+
+```bash
+sudo npm install -g live-server
+```
+
+### 3. Nerd Font
+
+Για τη σωστή εμφάνιση των εικονιδίων στο UI, είναι απαραίτητη η εγκατάσταση μιας γραμματοσειράς τύπου "Nerd Font".
+
+1.  Κατεβάστε μια γραμματοσειρά από το [www.nerdfonts.com](https://www.nerdfonts.com/font-downloads). Μια καλή επιλογή είναι η **FiraCode Nerd Font**.
+2.  Εγκαταστήστε τη στο σύστημά σας (συνήθως με διπλό κλικ και "Install").
+3.  Ρυθμίστε το terminal σας να χρησιμοποιεί τη νέα γραμματοσειρά.
 
 ## 🚀 Εγκατάσταση
 
-1.  **Δημιουργήστε αντίγραφο ασφαλείας (backup) των παλιών ρυθμίσεων (προαιρετικά):**
+1.  **Δημιουργήστε αντίγραφο ασφαλείας των παλιών ρυθμίσεων (προαιρετικά αλλά συνιστάται):**
     ```bash
     mv ~/.config/nvim ~/.config/nvim.bak
+    mv ~/.local/share/nvim ~/.local/share/nvim.bak
+    mv ~/.local/state/nvim ~/.local/state/nvim.bak
+    mv ~/.cache/nvim ~/.cache/nvim.bak
     ```
 
 2.  **Κλωνοποιήστε το repository στον φάκελο ρυθμίσεων του Neovim:**
     ```bash
-    git clone <URL_του_repository_σας> ~/.config/nvim
+    git clone https://github.com/TheShaicho/nvim.git ~/.config/nvim
     ```
+    **Σημείωση:** Αντικαταστήστε το `https://github.com/your-username/your-repo-name.git` με το πραγματικό URL του repository σας.
 
 3.  **Ξεκινήστε το Neovim:**
     ```bash
     nvim
     ```
-    Κατά την πρώτη εκκίνηση, ο package manager `lazy.nvim` θα εγκαταστήσει αυτόματα όλα τα plugins. Αμέσως μετά, το `mason.nvim` θα εγκαταστήσει τους LSPs και τα formatters. Η διαδικασία μπορεί να πάρει μερικά λεπτά.
-
-## ⌨️ Βασικές Συντομεύσεις
-
-Η παρακάτω λίστα περιγράφει τις κυριότερες συντομεύσεις. Το πλήκτρο `<leader>` είναι ρυθμισμένο στο `Space`.
-
-### Γενική Πλοήγηση & Διαχείριση
-| Συντόμευση      | Περιγραφή                                      |
-| --------------- | ---------------------------------------------- |
-| `j` / `k`         | **Αντιστροφή**: Κίνηση πάνω / κάτω              |
-| `;` / `:`         | **Αντιστροφή**: `:` για εντολές, `;` για επανάληψη `f`/`t` |
-| `<leader> f`      | Εφαρμογή format στο αρχείο                     |
-| `<leader> aa`     | Επιλογή όλου του κειμένου                      |
-| `<leader> q`      | Έξυπνο κλείσιμο παραθύρου/buffer               |
-| `<C-z>`           | Άνοιγμα/Κλείσιμο terminal (`toggleterm`)       |
-
-### Παράθυρα & Buffers
-| Συντόμευση      | Περιγραφή                                      |
-| --------------- | ---------------------------------------------- |
-| `<leader> v`      | Κάθετο split παραθύρου                         |
-| `<leader> h`      | Οριζόντιο split παραθύρου                      |
-| `<C-h/j/k/l>`     | Πλοήγηση στα παράθυρα (j/k αντίστροφα)          |
-| `<S-h>` / `<S-l>` | Πλοήγηση στο προηγούμενο/επόμενο buffer        |
-
-### Plugins
-| Συντόμευση      | Plugin            | Περιγραφή                                    |
-| --------------- | ----------------- | -------------------------------------------- |
-| `<leader> ff`     | **Telescope**     | Εύρεση αρχείων στο project (`find_files`)    |
-| `<leader> ft`     | **Telescope**     | Εύρεση κειμένου στο project (`live_grep`)    |
-| `<leader> fb`     | **Telescope**     | Εύρεση ανοιχτών buffers                     |
-| `<leader> e`      | **Telescope**     | Άνοιγμα file browser                         |
-| `<leader> x`      | **Trouble**       | Άνοιγμα/Κλείσιμο λίστας λαθών/warnings     |
-| `<leader> dh`     | **LSP**           | Εμφάνιση του μηνύματος κάτω από τον κέρσορα |
-| `<leader> dd`     | **LSP**           | Εμφάνιση documentation                      |
-| `<C-x>`           | **live-server**   | Εκκίνηση/Τερματισμός του live server       |
-
-### Sessions
-| Συντόμευση      | Plugin            | Περιγραφή                                    |
-| --------------- | ----------------- | -------------------------------------------- |
-| `<leader> s`      | **Persistence**   | Φόρτωση του τελευταίου session              |
-| `<leader> ss`     | **Persistence**   | Επιλογή session για φόρτωση                  |
-| `<leader> sq`     | **Persistence**   | Έξοδος χωρίς αποθήκευση του session          |
+    Κατά την πρώτη εκκίνηση, ο package manager `lazy.nvim` θα εγκαταστήσει αυτόματα όλα τα plugins. Αμέσως μετά, το `mason.nvim` θα εγκαταστήσει τους LSPs και τα formatters. Η διαδικασία μπορεί να πάρει μερικά λεπτά. Ακολουθήστε τις οδηγίες που μπορεί να εμφανιστούν στην οθόνη.
