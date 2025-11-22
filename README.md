@@ -22,21 +22,30 @@
 
 ### 1. Εργαλεία Συστήματος (Pacman)
 
-Εγκαταστήστε τα βασικά εργαλεία, συμπεριλαμβανομένων των `git`, `ripgrep` (για το Telescope), `go`, `nodejs`, `npm`, και τα build tools (`base-devel`).
+Εγκαταστήστε τα βασικά εργαλεία, συμπεριλαμβανομένων των `git`, `ripgrep` (για το Telescope), `go`, `nodejs`, `npm`, και τα build tools (`base-devel`). Επιπλέον, για βέλτιστη λειτουργία, εγκαταστήστε τα `wget`, `fd`, `python-pip` και `python-pynvim`.
 
 ```bash
-sudo pacman -Syu --noconfirm git ripgrep go nodejs npm base-devel
+sudo pacman -Syu --noconfirm git ripgrep go nodejs npm base-devel wget fd python-pip python-pynvim
 ```
 
 ### 2. Εργαλεία Node.js (NPM)
 
-Το `live-server` χρησιμοποιείται για την προεπισκόπηση των web projects. Εγκαταστήστε το global μέσω `npm`.
+Το `live-server` χρησιμοποιείται για την προεπισκόπηση των web projects και το `neovim` για την υποστήριξη του Node.js provider. Εγκαταστήστε τα global μέσω `npm`.
 
 ```bash
-sudo npm install -g live-server
+sudo npm install -g live-server neovim
 ```
 
-### 3. Nerd Font
+### 3. Ρύθμιση Tmux (προαιρετικό)
+
+Αν χρησιμοποιείτε `tmux`, συνιστάται η ρύθμιση του terminal σας για να αποφύγετε προβλήματα με την απεικόνιση των χρωμάτων στο Neovim. Προσθέστε την ακόλουθη γραμμή στο αρχείο `~/.tmux.conf`:
+
+```bash
+set-option -g default-terminal "screen-256color"
+```
+Μετά την προσθήκη, επανεκκινήστε το tmux ή φορτώστε ξανά τη ρύθμιση (`tmux source-file ~/.tmux.conf`).
+
+### 4. Nerd Font
 
 Για τη σωστή εμφάνιση των εικονιδίων στο UI, είναι απαραίτητη η εγκατάσταση μιας γραμματοσειράς τύπου "Nerd Font".
 

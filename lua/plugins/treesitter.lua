@@ -20,6 +20,7 @@ return {
 					"markdown",
 					"markdown_inline",
 					"bash",
+					"regex",
 				},
 
 				auto_install = true,
