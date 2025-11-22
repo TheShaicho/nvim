@@ -7,6 +7,17 @@ return {
 			"rcarriga/nvim-notify",
 		},
 		config = function()
+			-- Custom colors for nvim-notify
+			local purple = "#be95ff"
+			vim.api.nvim_set_hl(0, "NotifyERRORBorder", { fg = purple })
+			vim.api.nvim_set_hl(0, "NotifyINFOBorder", { fg = purple })
+			vim.api.nvim_set_hl(0, "NotifyDEBUGBorder", { fg = purple })
+			vim.api.nvim_set_hl(0, "NotifyTRACEBorder", { fg = purple })
+			vim.api.nvim_set_hl(0, "NotifyERRORIcon", { fg = purple })
+			vim.api.nvim_set_hl(0, "NotifyINFOIcon", { fg = purple })
+			vim.api.nvim_set_hl(0, "NotifyDEBUGIcon", { fg = purple })
+			vim.api.nvim_set_hl(0, "NotifyTRACEIcon", { fg = purple })
+
 			vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorder", { fg = "#be95ff", bg = "NONE" })
 			vim.api.nvim_set_hl(0, "NoiceSearchPopupBorder", { fg = "#ECBE7B", bg = "NONE" })
 
